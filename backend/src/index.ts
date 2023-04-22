@@ -1,33 +1,96 @@
-/**
- * Welcome to Cloudflare Workers! This is your first worker.
- *
- * - Run `wrangler dev src/index.ts` in your terminal to start a development server
- * - Open a browser tab at http://localhost:8787/ to see your worker in action
- * - Run `wrangler publish src/index.ts --name my-worker` to publish your worker
- *
- * Learn more at https://developers.cloudflare.com/workers/
- */
+import {
+  error,
+  json,
+  missing,
+  status,
+  ThrowableRouter,
+  withContent,
+  withParams,
+} from "itty-router-extras";
+import { v4 as uuidv4 } from "uuid";
 
-export interface Env {
-	// Example binding to KV. Learn more at https://developers.cloudflare.com/workers/runtime-apis/kv/
-	// MY_KV_NAMESPACE: KVNamespace;
-	//
-	// Example binding to Durable Object. Learn more at https://developers.cloudflare.com/workers/runtime-apis/durable-objects/
-	// MY_DURABLE_OBJECT: DurableObjectNamespace;
-	//
-	// Example binding to R2. Learn more at https://developers.cloudflare.com/workers/runtime-apis/r2/
-	// MY_BUCKET: R2Bucket;
-	//
-	// Example binding to a Service. Learn more at https://developers.cloudflare.com/workers/runtime-apis/service-bindings/
-	// MY_SERVICE: Fetcher;
-}
+import {
+  paramsIdSchema,
+  todoPostBodySchema,
+  todoPutBodySchema,
+} from "./schemas";
 
-export default {
-	async fetch(
-		request: Request,
-		env: Env,
-		ctx: ExecutionContext
-	): Promise<Response> {
-		return new Response("Hello World!");
-	},
-};
+export const todos = [
+  { id: "1", title: "Buy milk", completed: false },
+  { id: "2", title: "Buy eggs", completed: false },
+  { id: "3", title: "Buy bread", completed: false },
+];
+
+export const router = ThrowableRouter({ base: "/api/todos" });
+
+router
+  .get("/", () => json(todos))
+  .get("/:id", withParams, ({ params }) => {
+    const safe = paramsIdSchema.safeParse(params);
+    if (!safe.success) {
+      return error(400, "Invalid ID");
+    }
+    const { id } = safe.data;
+    const todo = todos.find((t) => t.id === id);
+
+    return todo ? json(todo) : missing("That todo was not found.");
+  });
+
+router.post("/", withContent, (request) => {
+  if (!request.json) {
+    return error(400, "request.json is missing");
+  }
+  const safe = todoPostBodySchema.safeParse(request.json);
+  if (!safe.success) {
+    return error(400, "Invalid Todo");
+  }
+  const { title } = safe.data;
+  const id = uuidv4();
+  const todo = { id, title, completed: false };
+  todos.push(todo);
+  return status(201, json(todo));
+});
+
+router.put("/:id", withParams, withContent, (request) => {
+  if (!request.json) {
+    return error(400, "request.json is missing");
+  }
+  const safeParams = paramsIdSchema.safeParse(request.params);
+  if (!safeParams.success) {
+    return error(400, "Invalid ID");
+  }
+
+  const safe = todoPutBodySchema.safeParse(request.json);
+  if (!safe.success) {
+    return error(400, "Invalid Todo");
+  }
+  const { title, completed } = safe.data;
+  const { id } = safeParams.data;
+  const todo = todos.find((t) => t.id === id);
+  if (!todo) {
+    return missing("That todo was not found.");
+  }
+  todo.title = title;
+  todo.completed = completed;
+  return status(200, json(todo));
+});
+
+router.delete("/:id", withParams, ({ params }) => {
+  const safe = paramsIdSchema.safeParse(params);
+  if (!safe.success) {
+    return error(400, "Invalid ID");
+  }
+  const { id } = safe.data;
+  const todo = todos.find((t) => t.id === id);
+  if (!todo) {
+    return missing("That todo was not found.");
+  }
+  todos.splice(todos.indexOf(todo), 1);
+  return status(204);
+});
+
+router.all("*", () => missing("Not Found"));
+
+addEventListener("fetch", (event) =>
+  event.respondWith(router.handle(event.request))
+);
