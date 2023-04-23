@@ -1,7 +1,7 @@
-import { error, json, missing, status } from "itty-router-extras";
+import { error, status } from "itty-router-extras";
 import { fromZodError } from "zod-validation-error";
 
-import todos from "./data";
+import { updateTodoFauna } from "./fuanadb";
 import { paramsIdSchema, todoPutBodySchema } from "./schemas";
 
 export const updateTodo = async (request: Request & { params: unknown }) => {
@@ -20,11 +20,6 @@ export const updateTodo = async (request: Request & { params: unknown }) => {
   }
   const { title, completed } = safe.data;
   const { id } = safeParams.data;
-  const todo = todos.find((t) => t.id === id);
-  if (!todo) {
-    return missing("That todo was not found.");
-  }
-  todo.title = title;
-  todo.completed = completed;
-  return status(200, json(todo));
+  await updateTodoFauna({ id, title, completed });
+  return status(200);
 };

@@ -19,7 +19,6 @@ const AddTodo = () => {
   const { refetch } = trpc.getAllTodos.useQuery();
 
   const onSubmit = async (data: CreateTodoInputs) => {
-    console.log(data);
     await createTodo.mutateAsync(data);
     reset();
     refetch();

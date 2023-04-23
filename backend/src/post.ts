@@ -1,8 +1,7 @@
-import { error, json, status } from "itty-router-extras";
-import { v4 as uuidv4 } from "uuid";
+import { error, status } from "itty-router-extras";
 import { fromZodError } from "zod-validation-error";
 
-import todos from "./data";
+import { createTodoFauna } from "./fuanadb";
 import { todoPostBodySchema } from "./schemas";
 
 export const postNewTodo = async (request: Request) => {
@@ -16,10 +15,7 @@ export const postNewTodo = async (request: Request) => {
     return error(400, validationError);
   }
   const { title } = safe.data;
+  await createTodoFauna(title);
 
-  console.log("Creating new todo:", title);
-  const id = uuidv4();
-  const todo = { id, title, completed: false };
-  todos.push(todo);
-  return status(201, json(todo));
+  return status(201);
 };
