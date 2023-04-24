@@ -1,8 +1,8 @@
 import { error, status } from "itty-router-extras";
+import { paramsIdSchema, todoPutBodySchema } from "zod-schemas";
 import { fromZodError } from "zod-validation-error";
 
 import { updateTodoFauna } from "./fuanadb";
-import { paramsIdSchema, todoPutBodySchema } from "./schemas";
 
 export const updateTodo = async (request: Request & { params: unknown }) => {
   if (!request.json) {

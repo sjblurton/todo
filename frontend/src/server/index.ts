@@ -1,7 +1,7 @@
 import axios from "axios";
 import { z } from "zod";
+import { createTodoInputSchema, todoSchema } from "zod-schemas";
 
-import { createTodoInputSchema, todoSchema } from "./schemas/todos";
 import { publicProcedure, router } from "./trpc";
 
 export const appRouter = router({
@@ -39,25 +39,17 @@ export const appRouter = router({
       }
       return;
     }),
-  updateTodo: publicProcedure
-    .input(
-      z.object({
-        id: z.string(),
-        title: z.string(),
-        completed: z.boolean(),
-      })
-    )
-    .mutation(async ({ input }) => {
-      const response = await axios.put(
-        `http://0.0.0.0:8787/api/todos/${input.id}`,
-        input
-      );
+  updateTodo: publicProcedure.input(todoSchema).mutation(async ({ input }) => {
+    const response = await axios.put(
+      `http://0.0.0.0:8787/api/todos/${input.id}`,
+      input
+    );
 
-      if (response.status !== 200) {
-        throw new Error("Failed to update todo");
-      }
-      return;
-    }),
+    if (response.status !== 200) {
+      throw new Error("Failed to update todo");
+    }
+    return;
+  }),
 });
 
 // Export type router type signature,

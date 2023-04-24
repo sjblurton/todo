@@ -1,7 +1,7 @@
 import { error, status } from "itty-router-extras";
+import { paramsIdSchema } from "zod-schemas";
 
 import { deleteTodoFauna } from "./fuanadb";
-import { paramsIdSchema } from "./schemas";
 
 export const deleteTodo = async ({ params }: Request & { params: unknown }) => {
   const safe = paramsIdSchema.safeParse(params);

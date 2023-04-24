@@ -1,7 +1,7 @@
 import { error, json, missing } from "itty-router-extras";
+import { paramsIdSchema } from "zod-schemas";
 
 import { getAllTodosFauna, getTodoByIdFauna } from "./fuanadb";
-import { paramsIdSchema } from "./schemas";
 
 export const getTodoById = async ({
   params,

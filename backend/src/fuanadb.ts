@@ -1,6 +1,5 @@
 import faunadb from "faunadb";
-
-import { todoSchema } from "./schemas";
+import { todoSchema } from "zod-schemas";
 
 const faunaClient = new faunadb.Client({
   secret: FAUNA_SECRET,

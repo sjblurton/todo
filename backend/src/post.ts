@@ -1,8 +1,8 @@
 import { error, status } from "itty-router-extras";
+import { todoPostBodySchema } from "zod-schemas";
 import { fromZodError } from "zod-validation-error";
 
 import { createTodoFauna } from "./fuanadb";
-import { todoPostBodySchema } from "./schemas";
 
 export const postNewTodo = async (request: Request) => {
   if (!request.json) {
