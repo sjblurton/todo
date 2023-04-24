@@ -1,0 +1,16 @@
+{
+  "name": "zod-schemas",
+  "version": "1.0.0",
+  "description": "global schemas",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "sjlurton",
+  "license": "ISC",
+  "dependencies": {
+    "typescript": "^5.0.4",
+    "zod": "^3.21.4"
+  }
+}
