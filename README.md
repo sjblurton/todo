@@ -76,3 +76,8 @@ const nextConfig = {
 ```
 
 # One Source Of Truth!
+
+- No version control worries (this will stay up-to-date with the branch it is on)
+- Can be shared between all folders
+- Only update in one place
+- Can add incrementally
