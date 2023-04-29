@@ -6,7 +6,7 @@ import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { CreateTodoInputs, createTodoInputSchema } from "schemas";
+import { CreateTodoInputs, createTodoInputSchema } from "zod-schemas";
 
 const AddTodo = () => {
   const { handleSubmit, register, reset } = useForm<CreateTodoInputs>({

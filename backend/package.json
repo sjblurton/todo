@@ -17,7 +17,6 @@
     "deploy": "wrangler publish"
   },
   "dependencies": {
-    "zod-schemas": "*",
     "faunadb": "^4.8.0",
     "itty-router": "^3.0.12",
     "itty-router-extras": "^0.4.2",

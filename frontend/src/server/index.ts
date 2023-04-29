@@ -1,6 +1,6 @@
 import axios from "axios";
 import { z } from "zod";
-import { createTodoInputSchema, todoSchema } from "schemas";
+import { createTodoInputSchema, todoSchema } from "zod-schemas";
 
 import { publicProcedure, router } from "./trpc";
 

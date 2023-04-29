@@ -5,7 +5,7 @@ import IconButton from "@mui/material/IconButton";
 import ListItem from "@mui/material/ListItem";
 import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction";
 import ListItemText from "@mui/material/ListItemText";
-import { Todo } from "schemas";
+import { Todo } from "zod-schemas";
 
 const TodoListItem = ({ completed, id, title }: Todo) => {
   const deleteTodo = trpc.deleteTodo.useMutation();
