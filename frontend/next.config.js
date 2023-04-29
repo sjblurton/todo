@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  transpilePackages: ["zod-schemas"],
+  transpilePackages: ["schemas"],
 };
 
 module.exports = nextConfig;
