@@ -81,3 +81,17 @@ const nextConfig = {
 - Can be shared between all folders
 - Only update in one place
 - Can add incrementally
+
+## Why Turbo?
+
+### Positives
+
+- one set-up and leave it
+- updates on every branch for every one
+- no need to change anything for anyone not working on it
+
+### Negative
+
+- new package
+- new things to learn
+- possible problems with github workflows
