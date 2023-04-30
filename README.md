@@ -35,14 +35,16 @@ That's all the set-up but everyone will need to do it and after every `npm i`.
 - Only update in one place
 - Can add incrementally
 
-## Why npm link?
+## Why Turbo?
 
 ### Positives
 
-- very easy setup
-- no packages
+- one set-up and leave it
+- updates on every branch for every one
+- no need to change anything for anyone not working on it
 
-### Negatives
+### Negative
 
-- A small learn curve to introduce it to the team
-- A small amount extra setup up after every `npm i`
+- new package
+- new things to learn
+- possible problems with github workflows
